@@ -1,0 +1,10 @@
+com\klu\auth_service\config\SecurityConfig.class
+com\klu\auth_service\security\JwtService.class
+com\klu\auth_service\AuthServiceApplication.class
+com\klu\auth_service\controller\AuthController.class
+com\klu\auth_service\dto\AuthResponse.class
+com\klu\auth_service\repository\UserRepository.class
+com\klu\auth_service\entity\AppUser.class
+com\klu\auth_service\service\AuthService.class
+com\klu\auth_service\dto\LoginRequest.class
+com\klu\auth_service\dto\RegisterRequest.class

@@ -1,0 +1,24 @@
+# Maven
+target/
+*/target/
+
+# Java
+*.class
+
+# IDE
+.metadata/
+.settings/
+.classpath
+.project
+.vscode/
+.idea/
+
+# Eclipse/STS
+*.code-workspace
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

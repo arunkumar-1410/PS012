@@ -1,0 +1,92 @@
+services:
+  eureka-server:
+    build:
+      context: ./eureka_server
+    image: distributed-online-exam-eureka
+    ports:
+      - "8761:8761"
+    environment:
+      PORT: "8761"
+    restart: unless-stopped
+
+  auth-service:
+    build:
+      context: ./auth_service/auth_service
+    image: distributed-online-exam-auth
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+    environment:
+      PORT: "8082"
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka
+      GATEWAY_BASE_URL: http://localhost:8090
+      SPRING_DATASOURCE_URL: "${AUTH_SPRING_DATASOURCE_URL:-jdbc:postgresql://host.docker.internal:5432/auth_db1}"
+      SPRING_DATASOURCE_USERNAME: "${AUTH_SPRING_DATASOURCE_USERNAME:-postgres}"
+      SPRING_DATASOURCE_PASSWORD: "${AUTH_SPRING_DATASOURCE_PASSWORD:-root}"
+      JWT_SECRET: "${JWT_SECRET:-secretKey}"
+    restart: unless-stopped
+
+  exam-service:
+    build:
+      context: ./exam_service
+    image: distributed-online-exam-exam
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+    environment:
+      PORT: "8081"
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka
+      GATEWAY_BASE_URL: http://localhost:8090
+      SPRING_DATASOURCE_URL: "${EXAM_SPRING_DATASOURCE_URL:-jdbc:postgresql://host.docker.internal:5432/exam_db}"
+      SPRING_DATASOURCE_USERNAME: "${EXAM_SPRING_DATASOURCE_USERNAME:-postgres}"
+      SPRING_DATASOURCE_PASSWORD: "${EXAM_SPRING_DATASOURCE_PASSWORD:-root}"
+    restart: unless-stopped
+
+  submission-service:
+    build:
+      context: ./submission_service
+    image: distributed-online-exam-submission
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+    environment:
+      PORT: "8083"
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka
+      GATEWAY_BASE_URL: http://localhost:8090
+      SPRING_DATASOURCE_URL: "${SUBMISSION_SPRING_DATASOURCE_URL:-jdbc:postgresql://host.docker.internal:5432/submission_db}"
+      SPRING_DATASOURCE_USERNAME: "${SUBMISSION_SPRING_DATASOURCE_USERNAME:-postgres}"
+      SPRING_DATASOURCE_PASSWORD: "${SUBMISSION_SPRING_DATASOURCE_PASSWORD:-root}"
+    restart: unless-stopped
+
+  evaluation-service:
+    build:
+      context: ./evaluation_service
+    image: distributed-online-exam-evaluation
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka-server
+    environment:
+      PORT: "8084"
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka
+      GATEWAY_BASE_URL: http://localhost:8090
+      SPRING_DATASOURCE_URL: "${EVALUATION_SPRING_DATASOURCE_URL:-jdbc:postgresql://host.docker.internal:5432/evaluation_db}"
+      SPRING_DATASOURCE_USERNAME: "${EVALUATION_SPRING_DATASOURCE_USERNAME:-postgres}"
+      SPRING_DATASOURCE_PASSWORD: "${EVALUATION_SPRING_DATASOURCE_PASSWORD:-root}"
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ./api_gateway
+    image: distributed-online-exam-gateway
+    ports:
+      - "8090:8090"
+    depends_on:
+      - eureka-server
+    environment:
+      PORT: "8090"
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka
+    restart: unless-stopped

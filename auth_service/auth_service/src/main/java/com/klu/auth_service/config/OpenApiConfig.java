@@ -2,6 +2,7 @@ package com.klu.auth_service.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +16,9 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class OpenApiConfig {
 
+        @Value("${app.gateway.base-url}")
+        private String gatewayBaseUrl;
+
     @Bean
     public OpenAPI customOpenAPI() {
 
@@ -27,7 +31,7 @@ public class OpenApiConfig {
 
                 .servers(List.of(
                         new Server()
-                                .url("http://localhost:8080/auth-service")
+                                .url(gatewayBaseUrl + "/auth-service")
                                 .description("API Gateway")
                 ))
 

@@ -17,25 +17,25 @@ public class GatewayConfig {
                 .route("auth-service", r -> r
                         .path("/auth-service/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://localhost:8082"))
+                        .uri("lb://AUTH-SERVICE"))
 
                 // Exam Service
                 .route("exam-service", r -> r
                         .path("/exam_service/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://localhost:8081"))
+                        .uri("lb://EXAM-SERVICE"))
 
                 // Submission Service
                 .route("submission-service", r -> r
                         .path("/submission-service/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://localhost:8083"))
+                        .uri("lb://SUBMISSION-SERVICE"))
 
                 // Evaluation Service
                 .route("evaluation-service", r -> r
                         .path("/evaluation-service/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://localhost:8084"))
+                        .uri("lb://EVALUATION-SERVICE"))
 
                 .build();
     }
